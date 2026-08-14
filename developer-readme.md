@@ -134,8 +134,13 @@ Inspect the database:
 docker compose exec db psql -U todo -d todo -c '\dt'
 ```
 
-`psql` is not installed in the DevCapsule base image, so run it through the
-database container as above rather than directly.
+The command above works with any base. If your base provides the
+`postgresql-client` component, `psql` is on `PATH` and you can connect
+directly:
+
+```bash
+psql "postgresql://todo:todo@localhost:5432/todo" -c '\dt'
+```
 
 Stop the database, keeping its data:
 
@@ -186,6 +191,45 @@ docker-compose.yml   development PostgreSQL
 | `CORS_ORIGINS` | `http://localhost:5173` | Comma-separated origins allowed to call the API directly. |
 | `BACKEND_URL` | `http://localhost:8000` | Where the Vite dev server proxies `/api`. |
 | `TODO_DB_PORT` | `5432` | Host port the development database publishes. |
+
+## Using Tighter Host Access
+
+Host networking and host Docker are *simplifying assumptions* for this sample,
+not requirements of DevCapsule. Both are recommendations you authorize, and
+either can be declined.
+
+**If you already run PostgreSQL.** You do not need host Docker at all. Skip
+`docker compose`, decline the `docker-daemon` recommendation, create the
+database yourself, and point the backend at it:
+
+```bash
+createdb todo && psql -d todo -c "CREATE USER todo WITH PASSWORD 'todo'"
+export DATABASE_URL="postgresql+psycopg://todo:todo@your-host:5432/todo"
+```
+
+**If you prefer bridge networking.** Decline the `network` recommendation and
+authorize bridge instead. Two things then change: the database is no longer at
+`localhost`, and the dev servers are not reachable from a host browser unless
+their ports are published from the environment. Point `DATABASE_URL` at the
+address the database container actually listens on — with a compose-published
+port that is usually the Docker bridge gateway, commonly `172.17.0.1`:
+
+```bash
+devcapsule project config authorize network bridge
+export DATABASE_URL="postgresql+psycopg://todo:todo@172.17.0.1:5432/todo"
+```
+
+Inspect the resulting plan before launching, so you can see exactly what
+changed:
+
+```bash
+devcapsule project config resolve
+devcapsule project config list
+```
+
+DevCapsule does not model service dependencies or port publication for V1, so
+these adjustments are manual today. That is a known limitation rather than an
+oversight.
 
 ## Without DevCapsule
 

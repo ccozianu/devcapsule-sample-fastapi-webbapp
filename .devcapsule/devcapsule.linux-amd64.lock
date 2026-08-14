@@ -1,6 +1,6 @@
 devcapsule-lock-format-version = 1
 resolution-matrix-version = "dogfood-v1"
-manifest-digest = "4b353c32efaa0b6babaf76240d0386f21257a13c31d0c6604a6296eac90e7547"
+manifest-digest = "e3e90ae7406a10b7f25c20beabff0e3175de76cbe824d19d2802c9a1559caa3c"
 platform = "linux-amd64"
 
 [base]

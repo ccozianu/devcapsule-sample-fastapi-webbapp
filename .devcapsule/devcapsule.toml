@@ -15,10 +15,10 @@ description = "SQLAlchemy URL for the TODO database. Defaults to the local devel
 
 [host.docker.mode.recommended]
 value = "host-socket"
-justification = "DevCapsule has no first-class service dependency yet, so this sample starts its PostgreSQL database with the Docker CLI against the host daemon."
+justification = "This sample starts its own PostgreSQL with the Docker CLI. Skip it if you already run PostgreSQL on the host and point database.url at that server instead."
 enables = ["local-postgresql-database"]
 
 [host.network.mode.recommended]
 value = "host"
-justification = "Lets the FastAPI backend and Vite dev server reach the sibling PostgreSQL container and be opened from the host browser without per-port plumbing."
+justification = "Deliberate V1 simplifying assumption: host networking lets the backend reach PostgreSQL and lets a host browser open the dev servers without per-port plumbing. developer-readme.md documents how to run with tighter networking instead."
 enables = ["local-postgresql-database", "browser-access-to-dev-servers"]
