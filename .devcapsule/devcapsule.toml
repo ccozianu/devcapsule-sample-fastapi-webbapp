@@ -1,0 +1,24 @@
+devcapsule-schema-version = 1
+
+[capabilities]
+need = ["claude-code-agent", "docker-cli", "node", "python", "python-ide"]
+
+[project]
+name = "DevCapsule Sample: FastAPI TODO Web App"
+slug = "devcapsule-sample-fastapi-webbapp"
+creator = "https://github.com/ccozianu"
+mount = "/workspace/fastapi-webbapp"
+
+[configuration.values."database.url"]
+type = "string"
+description = "SQLAlchemy URL for the TODO database. Defaults to the local development PostgreSQL started from docker-compose.yml."
+
+[host.docker.mode.recommended]
+value = "host-socket"
+justification = "DevCapsule has no first-class service dependency yet, so this sample starts its PostgreSQL database with the Docker CLI against the host daemon."
+enables = ["local-postgresql-database"]
+
+[host.network.mode.recommended]
+value = "host"
+justification = "Lets the FastAPI backend and Vite dev server reach the sibling PostgreSQL container and be opened from the host browser without per-port plumbing."
+enables = ["local-postgresql-database", "browser-access-to-dev-servers"]

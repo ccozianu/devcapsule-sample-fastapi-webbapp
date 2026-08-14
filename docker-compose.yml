@@ -1,0 +1,26 @@
+# Development database for the sample TODO application.
+#
+# DevCapsule does not yet model service dependencies, so this sample starts its
+# own PostgreSQL with the Docker CLI. Inside a DevCapsule environment the CLI
+# talks to the host daemon, which is why the project recommends host-socket
+# Docker and host networking.
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: devcapsule-sample-todo-db
+    environment:
+      POSTGRES_USER: todo
+      POSTGRES_PASSWORD: todo
+      POSTGRES_DB: todo
+    ports:
+      - "${TODO_DB_PORT:-5432}:5432"
+    volumes:
+      - todo-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U todo -d todo"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  todo-db-data:

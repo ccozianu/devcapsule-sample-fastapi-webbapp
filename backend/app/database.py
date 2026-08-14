@@ -1,0 +1,28 @@
+"""Database engine, session factory, and FastAPI session dependency."""
+
+from __future__ import annotations
+
+from collections.abc import Iterator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+from app.config import get_settings
+
+
+class Base(DeclarativeBase):
+    """Declarative base shared by every model in this sample."""
+
+
+engine = create_engine(get_settings().database_url, pool_pre_ping=True, future=True)
+SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+
+def get_session() -> Iterator[Session]:
+    """Yield one request-scoped session and always close it."""
+
+    session = SessionLocal()
+    try:
+        yield session
+    finally:
+        session.close()

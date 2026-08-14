@@ -1,0 +1,36 @@
+devcapsule-lock-format-version = 1
+resolution-matrix-version = "dogfood-v1"
+manifest-digest = "4b353c32efaa0b6babaf76240d0386f21257a13c31d0c6604a6296eac90e7547"
+platform = "linux-amd64"
+
+[base]
+# Published DevCapsule base pinned by digest rather than by a mutable tag. The
+# base already provides Python, Node.js, npm, Git, and the Docker CLI, which is
+# everything this sample needs beyond its own components.
+reference = "docker.io/mycodespaceai/devcapsule-base@sha256:b8d355b497a9aa2fc5b2420db0c07227721e3cf7d3388b2ca81f3ed40fb86a7f"
+
+[components]
+interactive-surface = "pycharm"
+
+[components.pycharm]
+version = "2026.2.0.1"
+variant = "professional"
+delivery-policy = "local-materialization"
+url = "https://download.jetbrains.com/python/pycharm-2026.2.0.1.tar.gz"
+sha256 = "4a37cb2d15703553c61e814d8e014bfa47308508470de5f968c4e9645b771675"
+
+[components.claude-code]
+version = "2.1.227"
+delivery-policy = "local-materialization"
+acquisition-authorization = "claude-code-download"
+license = "Proprietary"
+terms-url = "https://www.anthropic.com/legal/commercial-terms"
+distribution = "user-acquired-not-redistributed"
+
+[components.claude-code.artifacts.linux-amd64]
+url = "https://downloads.claude.ai/claude-code-releases/2.1.227/linux-x64/claude"
+sha256 = "6832dc3f1797b890b71116e5f2dbbf9a83fd3d0498c235b4b0f9cd0e6e499ad6"
+
+[materialization]
+recipe = "jetbrains-local-materialization"
+recipe-version = "1"
