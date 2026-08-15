@@ -8,5 +8,9 @@ __pycache__/
 node_modules/
 dist/
 
+# IDE state. PyCharm writes .idea/ when it opens this project, and it holds
+# machine-specific paths and interpreter settings.
+.idea/
+
 # Local environment overrides
 .env
