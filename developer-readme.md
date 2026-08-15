@@ -34,21 +34,28 @@ From the project root, review what the project asks for:
 devcapsule project config list
 ```
 
-Authorize the pinned base image, then the recommended host access. Nothing is
-granted until you do this:
+Nothing is granted until you authorize it. At an interactive terminal, one
+command previews every recommendation — including the pinned base image — and
+applies them only after you press `y`:
 
 ```bash
 devcapsule project config authorize --all-recommended
 devcapsule project config resolve
 ```
 
-`--all-recommended` previews every recommendation and applies them only after
-you confirm. To grant them individually instead:
+`--all-recommended` deliberately refuses to run without an interactive
+terminal. In a script, or to grant each value deliberately, authorize them one
+at a time. The base image is **required**, not merely recommended, so do not
+omit it; `config list` prints the exact digest this checkout expects:
 
 ```bash
+devcapsule project config list          # read the base-image row
+devcapsule project config authorize base-image \
+  docker.io/mycodespaceai/devcapsule-base@sha256:<digest from that row>
 devcapsule project config authorize docker-daemon host-socket
 devcapsule project config authorize network host
 devcapsule project config authorize claude-code-download true
+devcapsule project config resolve
 ```
 
 ### 2. Launch the environment
