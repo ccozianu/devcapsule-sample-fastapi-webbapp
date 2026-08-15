@@ -16,6 +16,7 @@ last section covers running it without DevCapsule.
 |---|---|
 | `python-ide` (PyCharm) | The interactive surface for this project. |
 | `claude-code-agent` | Claude Code, available in the environment terminal. |
+| `postgresql-client` | `psql`, provided by the pinned base rather than downloaded. |
 | `python`, `node`, `docker-cli` | Backend, frontend toolchain, and the database. |
 | `host.docker.mode = host-socket` (recommended) | DevCapsule does not model service dependencies yet, so the PostgreSQL container is started with the Docker CLI. |
 | `host.network.mode = host` (recommended) | Lets the backend reach PostgreSQL and lets a host browser open the dev servers without per-port plumbing. |
@@ -128,18 +129,19 @@ Build the production frontend bundle:
 cd frontend && npm run build
 ```
 
-Inspect the database:
-
-```bash
-docker compose exec db psql -U todo -d todo -c '\dt'
-```
-
-The command above works with any base. If your base provides the
-`postgresql-client` component, `psql` is on `PATH` and you can connect
-directly:
+Inspect the database. This project declares the `postgresql-client` component,
+so `psql` is on `PATH` inside the environment:
 
 ```bash
 psql "postgresql://todo:todo@localhost:5432/todo" -c '\dt'
+```
+
+The client comes from the pinned base rather than being downloaded, because
+PostgreSQL is redistributable. If you are working outside DevCapsule and have
+no local `psql`, go through the database container instead:
+
+```bash
+docker compose exec db psql -U todo -d todo -c '\dt'
 ```
 
 Stop the database, keeping its data:

@@ -1,13 +1,13 @@
 devcapsule-lock-format-version = 1
 resolution-matrix-version = "dogfood-v1"
-manifest-digest = "e3e90ae7406a10b7f25c20beabff0e3175de76cbe824d19d2802c9a1559caa3c"
+manifest-digest = "dd4ea2bb4f312da9f4bb060c5a4ca8684b8218c0431b08565ace6142572c46ab"
 platform = "linux-amd64"
 
 [base]
 # Published DevCapsule base pinned by digest rather than by a mutable tag. The
-# base already provides Python, Node.js, npm, Git, and the Docker CLI, which is
-# everything this sample needs beyond its own components.
-reference = "docker.io/mycodespaceai/devcapsule-base@sha256:b8d355b497a9aa2fc5b2420db0c07227721e3cf7d3388b2ca81f3ed40fb86a7f"
+# base provides Python, Node.js, npm, Git, the Docker CLI, and — from recipe 5 —
+# the PostgreSQL client this sample declares below.
+reference = "docker.io/mycodespaceai/devcapsule-base@sha256:a9f00250515b757d8e9d8ad832d9cab09a9a6e000f630651704e8538a4702998"
 
 [components]
 interactive-surface = "pycharm"
@@ -30,6 +30,13 @@ distribution = "user-acquired-not-redistributed"
 [components.claude-code.artifacts.linux-amd64]
 url = "https://downloads.claude.ai/claude-code-releases/2.1.227/linux-x64/claude"
 sha256 = "6832dc3f1797b890b71116e5f2dbbf9a83fd3d0498c235b4b0f9cd0e6e499ad6"
+
+[components.postgresql-client]
+# Redistributable under the PostgreSQL License, so the pinned base carries it
+# and nothing is downloaded during local materialization.
+version = "16"
+delivery-policy = "base-image"
+license = "PostgreSQL"
 
 [materialization]
 recipe = "jetbrains-local-materialization"

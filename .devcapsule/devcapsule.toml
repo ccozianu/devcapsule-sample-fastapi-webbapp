@@ -1,7 +1,7 @@
 devcapsule-schema-version = 1
 
 [capabilities]
-need = ["claude-code-agent", "docker-cli", "node", "python", "python-ide"]
+need = ["claude-code-agent", "docker-cli", "node", "postgresql-client", "python", "python-ide"]
 
 [project]
 name = "DevCapsule Sample: FastAPI TODO Web App"
